@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ff68be857fae743adbd018d67f5751, type: 3}
+  m_Name: MapHierarchyElements
+  m_EditorClassIdentifier: 
+  tabElementPrefab: {fileID: 168801113930439481, guid: edba795ca89ff814182a66ab5a291c5f,
+    type: 3}
+  hierarchyElementPrefabs:
+  - {fileID: 8035584036546763392, guid: cd7857f6e2c1f124b942dae0a3949b04, type: 3}
+  - {fileID: 7960021117570035940, guid: 81b86ac02e3dc3c44bbc86e07f831ed7, type: 3}

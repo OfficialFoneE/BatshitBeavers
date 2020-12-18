@@ -40,6 +40,11 @@ public class TugOfWarMinigame : MonoBehaviour
         player2 = GetComponentInChildren<TugOfWar_Player2>();
     }
 
+    private void Start()
+    {
+        slider.value = 0.5f;
+    }
+
     public void OnEnable()
     {
         currentWinStatus = WinStatus.None;
