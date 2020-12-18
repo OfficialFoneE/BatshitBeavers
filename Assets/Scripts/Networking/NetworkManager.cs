@@ -8,13 +8,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
 
     public delegate void GeneralEventHandler();
-    public GeneralEventHandler OnGameStart;
+    public static GeneralEventHandler OnGameStart;
 
-    private bool isPlayingGame = false;
+    private static bool isPlayingGame = false;
 
-    private int joinRetryCount = 0;
+    private static int joinRetryCount = 0;
 
-    private new PhotonView photonView;
+    private static new PhotonView photonView;
 
     private void Awake()
     {
