@@ -35,13 +35,45 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
 
+        IntroductionCanvas.ConnectedToServer = true;
+        //enable Buttons;
         NetworkDebugCanvas.SetConnectionStatus("Connected To Master");
 
-        NetworkDebugCanvas.SetConnectingStatus("Joining Random Open Room");
+        NetworkDebugCanvas.SetConnectingStatus("Waiting");
 
-        PhotonNetwork.JoinRandomRoom();
     }
 
+    public static void QueueForRandomMM()
+    {
+        NetworkDebugCanvas.SetConnectingStatus("Joining Random Open Room");
+
+        GameManager.EnterQueue();
+
+        PhotonNetwork.JoinRandomRoom();
+
+    }
+
+    public static void CreateLobby(string lobbyName)
+    {
+        NetworkDebugCanvas.SetConnectingStatus("Creating Random Room");
+
+        GameManager.EnterQueue();
+
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.IsVisible = true;
+        roomOptions.MaxPlayers = 2;
+        PhotonNetwork.JoinOrCreateRoom(lobbyName, roomOptions, TypedLobby.Default);
+
+    }
+    public static void JoinLobby(string lobbyName)
+    {
+        NetworkDebugCanvas.SetConnectingStatus("Joining Room");
+
+        GameManager.EnterQueue();
+
+        PhotonNetwork.JoinRoom(lobbyName);
+
+    }
     public override void OnJoinedRoom()
     {
         NetworkDebugCanvas.SetConnectionStatus("Joined Room");
@@ -115,6 +147,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+
+        IntroductionCanvas.ConnectedToServer = true;
+
         switch (cause)
         {
             case DisconnectCause.None:
@@ -154,6 +189,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
         }
 
+        Start();
         //TODO: message disconnetion error and maybe reconnect based on error
     }
 
