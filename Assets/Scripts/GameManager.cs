@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviour
         repeatingTileEnviroment = FindObjectOfType<RepeatingTileEnviroment>(true);
     }
 
+    private void Start()
+    {
+        NetworkManager.OnGameStart += FoundQueue;
+    }
+
     public static void EnterQueue()
     {
         titleScreen.enabled = false;
@@ -35,7 +40,9 @@ public class GameManager : MonoBehaviour
     {
         introductionCanvas.enabled = false;
 
-        //start game
+        repeatingTileEnviroment.AlignWithEnviroment();
+
+        CameraSceneMover.TravelToRiverEnviroment();
     }
 
     public static void LeaveQueue()

@@ -35,7 +35,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
 
-        IntroductionCanvas.ConnectedToServer = true;
+        TitleScreen.ConnectedToServer = true;
         //enable Buttons;
         NetworkDebugCanvas.SetConnectionStatus("Connected To Master");
 
@@ -148,7 +148,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
 
-        IntroductionCanvas.ConnectedToServer = true;
+        TitleScreen.ConnectedToServer = true;
 
         switch (cause)
         {

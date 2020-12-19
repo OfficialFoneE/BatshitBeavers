@@ -20,10 +20,15 @@ public class RepeatingTileEnviroment : MonoBehaviour
 
     private BufferedEnviroment lastEnviroment;
 
+    private Transform riverEnviroment;
+
+    private bool repeatEnviroment = true;
+
     private void Awake()
     {
         transform = GetComponent<Transform>();
         bufferedEnviroment = new BufferedArray<BufferedEnviroment>(InstantiateBufferedEnviroment, BufferBufferedEnviroment);
+        riverEnviroment = FindObjectOfType<RiverEnviroment>().transform;
     }
 
     void Start()
@@ -43,20 +48,30 @@ public class RepeatingTileEnviroment : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < bufferedEnviroment.bufferedCount; i++)
+        if (repeatEnviroment)
         {
-            bufferedEnviroment[i].position.y += speed * Time.deltaTime;
-            var temp = bufferedEnviroment[i].position;
-            bufferedEnviroment[i].transform.localPosition = new Vector3(temp.x, temp.y, temp.z);
-
-            if(temp.y >= width * 1.5 + 0.5)
+            for (int i = 0; i < bufferedEnviroment.bufferedCount; i++)
             {
-                bufferedEnviroment[i].position = new Vector3(0, lastEnviroment.position.y - width + speed * Time.deltaTime, 0);
+                bufferedEnviroment[i].position.y += speed * Time.deltaTime;
+                var temp = bufferedEnviroment[i].position;
+                bufferedEnviroment[i].transform.localPosition = new Vector3(temp.x, temp.y, temp.z);
 
-                lastEnviroment = bufferedEnviroment[i];
+                if (temp.y >= width * 1.5 + 0.5)
+                {
+                    bufferedEnviroment[i].position = new Vector3(0, lastEnviroment.position.y - width + speed * Time.deltaTime, 0);
+
+                    lastEnviroment = bufferedEnviroment[i];
+                }
             }
         }
+    }
 
+    public void AlignWithEnviroment()
+    {
+        var temp = lastEnviroment.transform.position;
+        temp.y -= width;
+        riverEnviroment.transform.position = temp;
+        repeatEnviroment = false;
     }
 
     private class BufferedEnviroment : BufferedObject
