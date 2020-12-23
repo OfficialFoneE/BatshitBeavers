@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 7967572471658815575}
   - component: {fileID: 7786777675932384681}
   - component: {fileID: -7122266627457370866}
+  - component: {fileID: 8514954681421711308}
   m_Layer: 5
   m_Name: HoldKeyMinigame
   m_TagString: Untagged
@@ -383,3 +384,26 @@ MonoBehaviour:
   keyCode: 32
   holdTime: 30
   decayTime: 1
+--- !u!114 &8514954681421711308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891354543057223669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 1
+  ObservedComponents:
+  - {fileID: -7122266627457370866}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

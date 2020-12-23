@@ -8,6 +8,14 @@ public class TugOfWarMinigame : MonoBehaviour
 
     public enum WinStatus { Player1, Player2, Tie, None }
 
+    public KeyCode keyCode
+    {
+        set
+        {
+            player1.buttonToPress = value;
+            player2.buttonToPress = value;
+        }
+    }
 
     public delegate void OnFinishedStatus(WinStatus winStatus);
     public OnFinishedStatus onFinishedStatus;

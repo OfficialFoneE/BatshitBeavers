@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 6574902341911828563}
   - component: {fileID: 6466678892802770775}
   - component: {fileID: 1909628436702046}
+  - component: {fileID: 2099607367}
   m_Layer: 5
   m_Name: SpamKeyBold
   m_TagString: Untagged
@@ -381,6 +382,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyCode: 32
-  valuePerKeyPress: 0.1
-  hasDecay: 0
-  decayAmount: 0.05
+  valuePerKeyPress: 0.01
+  hasDecay: 1
+  decayAmount: 0.01
+--- !u!114 &2099607367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354192439807433961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

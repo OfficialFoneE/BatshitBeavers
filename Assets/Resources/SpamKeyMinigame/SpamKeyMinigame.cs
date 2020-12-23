@@ -4,18 +4,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class SpamKeyMinigame : MonoBehaviour
+public class SpamKeyMinigame : MonoBehaviour, IPunObservable
 {
-    private static Color player1Color = new Color(173 / 255.0f, 47 / 255.0f, 69 / 255.0f, 255 / 255.0f);
+    private static Color player1Color = new Color(255 / 255.0f, 0 / 255.0f, 45 / 255.0f, 255 / 255.0f);
     private static Color player2Color = new Color(240 / 255.0f, 181 / 255.0f, 65 / 255.0f, 255 / 255.0f);
 
     private ProgressBar progressBar;
 
+    private PhotonView photonView;
+
     private TextMeshProUGUI sliderText;
     private Image loadingBarImage;
 
-    public bool isPlayer1;
+    private bool _isPlayer1;
+    public bool isPlayer1
+    {
+        private get
+        {
+            return _isPlayer1;
+        }
+        set
+        {
+            if (value)
+            {
+                sliderText.color = player1Color;
+                loadingBarImage.color = player1Color;
+            } else
+            {
+                sliderText.color = player2Color;
+                loadingBarImage.color = player2Color;
+            }
+            _isPlayer1 = value;
+        }
+    }
 
     public KeyCode keyCode;
 
@@ -24,59 +47,94 @@ public class SpamKeyMinigame : MonoBehaviour
     public bool hasDecay = false;
     public float decayAmount = 0.05f;
 
-    private float currentValue = 0;
+    public float currentValue = 0;
 
-    public delegate void OnFinished();
-    public OnFinished onFinished;
+    public delegate void GeneralEventHandler();
+    public GeneralEventHandler onClicked;
+    public GeneralEventHandler onFinished;
+    public GeneralEventHandler onZero;
 
     private void Awake()
     {
         progressBar = GetComponent<ProgressBar>();
-
+        photonView = GetComponent<PhotonView>();
         sliderText = GetComponentInChildren<TextMeshProUGUI>();
         loadingBarImage = transform.Find("Background").Find("Loading Bar").GetComponent<Image>();
     }
 
     private void Start()
     {
-        if(isPlayer1)
+        NetworkManager.OnGameStart += OnGameStart;
+    }
+
+    private void OnGameStart()
+    {
+        if (((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)) && !photonView.IsMine)
         {
-            sliderText.color = player1Color;
-            loadingBarImage.color = player1Color;
-        } else
-        {
-            sliderText.color = player2Color;
-            loadingBarImage.color = player2Color;
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         }
     }
 
     private void OnEnable()
     {
         currentValue = 0;
+
+        //if(((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)) && !photonView.IsMine)
+        //{
+        //    photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        //}
     }
 
     private void Update()
     {
-        if(hasDecay)
+        if (photonView.IsMine)
         {
-            currentValue -= decayAmount * Time.deltaTime;
-        }
 
-        currentValue = Mathf.Clamp(currentValue, 0, 1f);
 
-        if (Input.GetKeyDown(keyCode))
-        {
-            currentValue += valuePerKeyPress;
+            if (Input.GetKeyDown(keyCode))
+            {
+                currentValue += valuePerKeyPress;
+                if (onClicked != null)
+                {
+                    onClicked.Invoke();
+                }
+            }
+
+            if (currentValue >= 1f)
+            {
+                if (onFinished != null)
+                {
+                    onFinished.Invoke();
+                }
+            }
+
+            if (hasDecay)
+            {
+                currentValue -= decayAmount * Time.deltaTime;
+            }
+
+            currentValue = Mathf.Clamp(currentValue, 0, 1f);
+
+            if (currentValue <= 0)
+            {
+                if(onZero != null)
+                {
+                    onZero.Invoke();
+                }
+            }
         }
 
         progressBar.currentPercent = currentValue * 100;
+    }
 
-        if (currentValue >= 1f)
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
         {
-            if (onFinished != null)
-            {
-                onFinished.Invoke();
-            }
+            stream.Serialize(ref currentValue);
+        } else
+        {
+            stream.Serialize(ref currentValue);
         }
     }
 }

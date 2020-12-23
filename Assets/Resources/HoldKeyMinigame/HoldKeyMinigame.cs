@@ -2,11 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using Photon.Pun;
 
-public class HoldKeyMinigame : MonoBehaviour
+public class HoldKeyMinigame : MonoBehaviour, IPunObservable
 {
+    private static Color player1Color = new Color(255 / 255.0f, 0 / 255.0f, 45 / 255.0f, 255 / 255.0f);
+    private static Color player2Color = new Color(240 / 255.0f, 181 / 255.0f, 65 / 255.0f, 255 / 255.0f);
 
     private ProgressBar progressBar;
+
+    private PhotonView photonView;
 
     public KeyCode keyCode;
 
@@ -14,12 +21,54 @@ public class HoldKeyMinigame : MonoBehaviour
     public float decayTime = 1f;
     private float currentHoldTime = 0;
 
+    private TextMeshProUGUI sliderText;
+    private Image loadingBarImage;
+
+    private bool _isPlayer1;
+    public bool isPlayer1
+    {
+        get
+        {
+            return _isPlayer1;
+        }
+        set
+        {
+            if (value)
+            {
+                sliderText.color = player1Color;
+                loadingBarImage.color = player1Color;
+            }
+            else
+            {
+                sliderText.color = player2Color;
+                loadingBarImage.color = player2Color;
+            }
+            _isPlayer1 = value;
+        }
+    }
+
     public delegate void OnFinished();
     public OnFinished onFinished;
 
     private void Awake()
     {
         progressBar = GetComponent<ProgressBar>();
+        photonView = GetComponent<PhotonView>();
+        sliderText = GetComponentInChildren<TextMeshProUGUI>();
+        loadingBarImage = transform.Find("Background").Find("Loading Bar").GetComponent<Image>();
+    }
+
+    private void Start()
+    {
+        NetworkManager.OnGameStart += OnGameStart;
+    }
+
+    private void OnGameStart()
+    {
+        if (((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)) && !photonView.IsMine)
+        {
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        }
     }
 
     private void OnEnable()
@@ -29,26 +78,40 @@ public class HoldKeyMinigame : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(keyCode))
+        if (photonView.IsMine)
         {
-            currentHoldTime += Time.deltaTime;
+            if (Input.GetKey(keyCode))
+            {
+                currentHoldTime += Time.deltaTime;
+            }
+            else
+            {
+                currentHoldTime -= decayTime * Time.deltaTime;
+            }
+
+            currentHoldTime = Mathf.Clamp(currentHoldTime, 0, holdTime);
+
+            if (currentHoldTime >= holdTime)
+            {
+                if (onFinished != null)
+                {
+                    onFinished.Invoke();
+                }
+            }
+        }
+
+        progressBar.currentPercent = currentHoldTime / holdTime * 100;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.Serialize(ref currentHoldTime);
         }
         else
         {
-            currentHoldTime -= decayTime * Time.deltaTime;
-        }
-
-        currentHoldTime = Mathf.Clamp(currentHoldTime, 0, holdTime);
-
-        progressBar.currentPercent = currentHoldTime / holdTime * 100;
-
-        if (currentHoldTime >= holdTime)
-        {
-            if(onFinished != null)
-            {
-                onFinished.Invoke();
-            }
+            stream.Serialize(ref currentHoldTime);
         }
     }
-
 }

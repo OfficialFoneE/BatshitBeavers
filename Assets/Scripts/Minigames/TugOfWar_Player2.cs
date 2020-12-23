@@ -10,7 +10,7 @@ public class TugOfWar_Player2 : MonoBehaviour, IPunObservable
 
     private PhotonView photonView;
 
-    [SerializeField] private KeyCode buttonToPress;
+    [SerializeField] public KeyCode buttonToPress;
 
     public int _pressCount;
     public int pressCount
@@ -54,7 +54,6 @@ public class TugOfWar_Player2 : MonoBehaviour, IPunObservable
     {
         if(stream.IsWriting)
         {
-            Debug.Log("Writing");
             stream.Serialize(ref _pressCount);
             minigame.UpdateTugOfWar();
         }
