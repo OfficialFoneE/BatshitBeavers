@@ -20,6 +20,8 @@ public class BeaverTugOfWar : MonoBehaviour
 
     public bool inPlay = false;
 
+    public int logWinAmount = 5;
+
     private void Awake()
     {
         warningButton = transform.Find("Warning").gameObject;
@@ -33,12 +35,12 @@ public class BeaverTugOfWar : MonoBehaviour
     private void Start()
     {
         NetworkManager.OnGameStart += DisableBeaversFighting;
+        tugOfWarMinigame.onFinishedStatus += OnWin;
     }
 
     [PunRPC]
     public void EnableBeaverTugOfWar(int keyCode)
     {
-        Debug.Log("Fighting has been called");
         warningButton.SetActive(true);
         beaversFighting.SetActive(false);
         canvas.SetActive(false);
@@ -55,11 +57,47 @@ public class BeaverTugOfWar : MonoBehaviour
         canvas.SetActive(true);
     }
 
+    private void OnWin(TugOfWarMinigame.WinStatus winStatus)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            switch (winStatus)
+            {
+                case TugOfWarMinigame.WinStatus.Player1:
+                    GameCanvas.SetPlayer1Logs(GameCanvas.GetPlayer1Logs() + logWinAmount);
+                    break;
+
+                case TugOfWarMinigame.WinStatus.Player2:
+                    GameCanvas.SetPlayer2Logs(GameCanvas.GetPlayer2Logs() + logWinAmount);
+                    break;
+                case TugOfWarMinigame.WinStatus.Tie:
+                    break;
+                case TugOfWarMinigame.WinStatus.None:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        DisableBeaversFighting();
+        photonView.RPC("DisableBeaversFighting", RpcTarget.Others);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Invoke("RandomWaitTime", Random.Range(10, 90));
+        }
+    }
+
+    [PunRPC]
     private void DisableBeaversFighting()
     {
         warningButton.SetActive(false);
         beaversFighting.SetActive(false);
         canvas.SetActive(false);
+    }
+
+    private void RandomWaitTime()
+    {
         inPlay = false;
     }
 

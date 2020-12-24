@@ -31,7 +31,7 @@ public class CameraSceneMover : MonoBehaviour
 
     private void Update()
     {
-        if(DistanceSqrd(cameraTransform.position, target) > 0.01)
+        if(DistanceSqrd(cameraTransform.position, target) > 0.001)
         {
             var newPos = Vector3.MoveTowards(cameraTransform.position, target, speed * Time.deltaTime);
 
@@ -49,7 +49,9 @@ public class CameraSceneMover : MonoBehaviour
 
     public static void TravelToRiverEnviroment()
     {
-        target = riverEnviroment.position;
+        var tempTarget = riverEnviroment.position;
+        tempTarget.y += 0.140f;
+        target = tempTarget;
         target.z = cameraTransform.position.z;
         instance.enabled = true;
     }

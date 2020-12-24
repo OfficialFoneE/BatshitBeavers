@@ -11,7 +11,8 @@ public class ButtonPress : MonoBehaviour
     {
         set
         {
-            text.text = value.ToString().ToUpper();
+            if(text != null)
+                text.text = value.ToString().ToUpper();
         }
     }
 

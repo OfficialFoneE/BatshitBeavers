@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using Michsky.UI.ModernUIPack;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,11 +39,17 @@ public class TugOfWarMinigame : MonoBehaviour
 
     private PhotonView photonView;
 
-    private UnityEngine.UI.Slider slider;
+    private ProgressBar player1ProgressBar;
+    private ProgressBar player2ProgressBar;
+
+    private bool cantCallAnymore = false;
 
     private void Awake()
     {
-        slider = GetComponentInChildren<UnityEngine.UI.Slider>();
+        var bars = GetComponentsInChildren<ProgressBar>();
+        player1ProgressBar = bars[0];
+        player2ProgressBar = bars[1];
+
         photonView = GetComponent<PhotonView>();
         player1 = GetComponentInChildren<TugOfWar_Player1>();
         player2 = GetComponentInChildren<TugOfWar_Player2>();
@@ -50,12 +57,14 @@ public class TugOfWarMinigame : MonoBehaviour
 
     private void Start()
     {
-        slider.value = 0.5f;
+        player1ProgressBar.currentPercent = 0.5f;
+        player2ProgressBar.currentPercent = 0.5f;
     }
 
     public void OnEnable()
     {
         currentWinStatus = WinStatus.None;
+        cantCallAnymore = false;
     }
 
     public void UpdateTugOfWar()
@@ -69,11 +78,13 @@ public class TugOfWarMinigame : MonoBehaviour
 
                 if (count != 0)
                 {
-                    slider.value = (player1.pressCount / (float)count) / percentage;
+                    player1ProgressBar.currentPercent = ((player1.pressCount / (float)count) / percentage) * 100;
+                    player2ProgressBar.currentPercent = (1 - ((player1.pressCount / (float)count) / percentage)) * 100;
                 }
                 else
                 {
-                    slider.value = 0.5f;
+                    player1ProgressBar.currentPercent = 0.5f;
+                    player2ProgressBar.currentPercent = 0.5f;
                 }
 
                 break;
@@ -84,7 +95,9 @@ public class TugOfWarMinigame : MonoBehaviour
                 if (count2 != 0)
                 {
 
-                    slider.value = player1.pressCount / (float)count2; ;
+                    player1ProgressBar.currentPercent = ((float)player1.pressCount / (float)count2) * 100;
+
+                    player2ProgressBar.currentPercent = (1 - (player1.pressCount / (float)count2)) * 100;
                 }
 
                 break;
@@ -92,9 +105,10 @@ public class TugOfWarMinigame : MonoBehaviour
 
         if (UpdateWinCondition())
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient && !cantCallAnymore)
             {
-                photonView.RPC("CallTugOfWarWinner", RpcTarget.AllViaServer, (int)currentWinStatus);
+                cantCallAnymore = true;
+                CallTugOfWarWinner((int)currentWinStatus);
             }
         }
     }
@@ -169,7 +183,8 @@ public class TugOfWarMinigame : MonoBehaviour
 
         }
 
-        this.gameObject.SetActive(false);
+        //disable vuffer object
+        //this.gameObject.SetActive(false);
     }
 }
 

@@ -27,16 +27,32 @@ public class SpamKeyMinigame : MonoBehaviour, IPunObservable
         }
         set
         {
+            if (sliderText == null || loadingBarImage == null || photonView == null)
+            {
+                return;
+            }
             if (value)
             {
                 sliderText.color = player1Color;
                 loadingBarImage.color = player1Color;
-            } else
+            }
+            else
             {
                 sliderText.color = player2Color;
                 loadingBarImage.color = player2Color;
             }
             _isPlayer1 = value;
+
+            bool shouldBeMine = ((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient));
+
+            if(shouldBeMine && !photonView.IsMine)
+            {
+                photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            } else if (!shouldBeMine && photonView.IsMine)
+            {
+                photonView.TransferOwnership(0);
+            }
+
         }
     }
 

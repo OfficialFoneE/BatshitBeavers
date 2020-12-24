@@ -41,17 +41,17 @@ namespace Michsky.UI.ModernUIPack
                 }
             }
 
-            if (currentPercent == 100 || currentPercent >= 100 && restart == true)
-            {
-                currentPercent = 0;
-            }
+            //if (currentPercent == 100 || currentPercent >= 100 && restart == true)
+            //{
+            //    currentPercent = 0;
+            //}
 
             if (enableSpecified == true && specifiedValue == 0)
             {
                 currentPercent = 0;
             }
 
-            loadingBar.GetComponent<Image>().fillAmount = currentPercent / 100;
+            loadingBar.GetComponent<Image>().fillAmount = currentPercent / 100.0f;
             textPercent.GetComponent<TextMeshProUGUI>().text = ((int)currentPercent).ToString("F0") + "%";
         }
     }

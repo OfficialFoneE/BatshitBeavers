@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
         introductionCanvas.enabled = true;
 
         repeatingTileEnviroment.speed = repeatingTileEnviroment.queueSpeed;
+
+        AudioSFXReferences.PlayQueueingMusic();
     }
 
     public static void WaitForQueue()
@@ -43,6 +45,8 @@ public class GameManager : MonoBehaviour
         repeatingTileEnviroment.AlignWithEnviroment();
 
         CameraSceneMover.TravelToRiverEnviroment();
+
+        AudioSFXReferences.PlayGameMusic();
     }
 
     public static void LeaveQueue()
@@ -51,6 +55,8 @@ public class GameManager : MonoBehaviour
         introductionCanvas.enabled = false;
 
         repeatingTileEnviroment.speed = repeatingTileEnviroment.startSpeed;
+
+        AudioSFXReferences.PlayMainMenuMusic();
     }
 
 }

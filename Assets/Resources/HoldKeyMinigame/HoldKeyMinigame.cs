@@ -19,7 +19,7 @@ public class HoldKeyMinigame : MonoBehaviour, IPunObservable
 
     public float holdTime = 30f;
     public float decayTime = 1f;
-    private float currentHoldTime = 0;
+    public float currentHoldTime = 0;
 
     private TextMeshProUGUI sliderText;
     private Image loadingBarImage;
@@ -33,6 +33,9 @@ public class HoldKeyMinigame : MonoBehaviour, IPunObservable
         }
         set
         {
+            if (sliderText == null || loadingBarImage == null || photonView == null)
+                return;
+
             if (value)
             {
                 sliderText.color = player1Color;
@@ -44,6 +47,17 @@ public class HoldKeyMinigame : MonoBehaviour, IPunObservable
                 loadingBarImage.color = player2Color;
             }
             _isPlayer1 = value;
+
+            bool shouldBeMine = ((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient));
+
+            if (shouldBeMine && !photonView.IsMine)
+            {
+                photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+            else if (!shouldBeMine && photonView.IsMine)
+            {
+                photonView.TransferOwnership(0);
+            }
         }
     }
 

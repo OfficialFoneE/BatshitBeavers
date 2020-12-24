@@ -77,7 +77,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         NetworkDebugCanvas.SetConnectionStatus("Joined Room");
-
         //NetworkDebugCanvas.SetConnectingStatus("Creating New Room");
     }
 
@@ -98,6 +97,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         NetworkDebugCanvas.SetConnectionStatus("Created Room");
 
         NetworkDebugCanvas.SetConnectingStatus("Waiting for Opponent");
+
+        //AudioSFXReferences.PlayQueueingMusic();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -113,6 +114,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             //TODO failed to create lobby 5 times, disconnecting
             PhotonNetwork.Disconnect();
+            joinRetryCount = 0;
         }
 
     }

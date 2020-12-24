@@ -29,6 +29,7 @@ public class BufferedFishImages : MonoBehaviour
     private void Start()
     {
         bufferedArray.UpdatePooledObjects(20);
+        bufferedArray.UpdatePooledObjects(3);
         //bufferedArray.UpdatePooledObjects(0);
     }
 

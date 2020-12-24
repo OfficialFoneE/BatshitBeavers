@@ -26,17 +26,13 @@ public class AudioSFXReferences : MonoBehaviour
     private static AudioClip buttonHighlightClip;
     private static AudioClip buttonClickClip;
 
-    [SerializeField] private AudioClip graphNodeHighlight;
-    [SerializeField] private AudioClip _nodeCreateClip;
-    [SerializeField] private AudioClip _nodeDestroyClip;
-    private static AudioClip nodeCreateClip;
-    private static AudioClip nodeDestroyClip;
 
-    [SerializeField] private AudioClip graphEdgeHighlight;
-    [SerializeField] private AudioClip _edgeCreateClip;
-    [SerializeField] private AudioClip _edgeDestroyClip;
-    private static AudioClip edgeCreateClip;
-    private static AudioClip edgeDestroyClip;
+    [SerializeField] private AudioClip _mainMenuMusic;
+    [SerializeField] private AudioClip _queueingMusic;
+    [SerializeField] private AudioClip _gameMusic;
+    private static AudioClip mainMenuMusic;
+    private static AudioClip queueingMusic;
+    private static AudioClip gameMusic;
 
     private void Awake()
     {
@@ -51,10 +47,9 @@ public class AudioSFXReferences : MonoBehaviour
         buttonHighlightClip = _buttonHighlightClip;
         buttonClickClip = _buttonClickClip;
 
-        nodeCreateClip = _nodeCreateClip;
-        nodeDestroyClip = _nodeDestroyClip; ;
-        edgeCreateClip = _edgeCreateClip;
-        edgeDestroyClip = _edgeDestroyClip;
+        mainMenuMusic = _mainMenuMusic;
+        queueingMusic = _queueingMusic;
+        gameMusic = _gameMusic;
 
         bufferedAudioSources.UpdatePooledObjects(20);
         bufferedAudioSources.UpdatePooledObjects(0);
@@ -62,11 +57,13 @@ public class AudioSFXReferences : MonoBehaviour
 
     private void Start()
     {
-        if (backgroundMusicClips.Count > 0)
-        {
-            currentClipIndex = 0;
-            PlaySong();
-        }
+        //if (backgroundMusicClips.Count > 0)
+        //{
+        //    currentClipIndex = 0;
+        //    PlaySong();
+        //}
+
+        PlayMainMenuMusic();
     }
 
     private void PlayNextTrackAutomatically()
@@ -109,7 +106,32 @@ public class AudioSFXReferences : MonoBehaviour
             onMusicChanged.Invoke(backgroundMusicClips[currentClipIndex].name);
         }
 
-        Invoke("PlayNextTrackAutomatically", backgroundMusicClips[currentClipIndex].length + UnityEngine.Random.Range(15, 25));
+        //Invoke("PlayNextTrackAutomatically", backgroundMusicClips[currentClipIndex].length + UnityEngine.Random.Range(15, 25));
+    }
+
+    public static void PlayMainMenuMusic()
+    {
+        backgroundMusicAudioSource.Stop();
+
+        backgroundMusicAudioSource.clip = mainMenuMusic;
+
+        backgroundMusicAudioSource.Play();
+    }
+    public static void PlayQueueingMusic()
+    {
+        backgroundMusicAudioSource.Stop();
+
+        backgroundMusicAudioSource.clip = queueingMusic;
+
+        backgroundMusicAudioSource.Play();
+    }
+    public static void PlayGameMusic()
+    {
+        backgroundMusicAudioSource.Stop();
+
+        backgroundMusicAudioSource.clip = gameMusic;
+
+        backgroundMusicAudioSource.Play();
     }
 
     public static void PlayButtonHighlight()
@@ -121,32 +143,6 @@ public class AudioSFXReferences : MonoBehaviour
     {
         bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(buttonClickClip, 1f, 2);
     }
-
-    public static void PlayCreateNode()
-    {
-        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(nodeCreateClip, Random.Range(0.9f, 1.1f), 1);
-    }
-    public static void PlayDestroyNode()
-    {
-        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(nodeDestroyClip, Random.Range(0.9f, 1.1f), 1.35f);
-    }
-
-    public static void PlayCreateEdge()
-    {
-        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(edgeCreateClip, Random.Range(0.9f, 1.1f), 1);
-    }
-    public static void PlayDestroyEdge()
-    {
-        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(edgeDestroyClip, Random.Range(0.9f, 1.1f), 1.35f);
-    }
-
-
-
-
-
-
-
-
 
     private BufferedAudioSource InstantiateBufferedAudioSource()
     {

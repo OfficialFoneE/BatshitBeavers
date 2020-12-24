@@ -17,6 +17,6 @@ public class TImer : MonoBehaviour
     void Update()
     {
         var ts = TimeSpan.FromSeconds(MinigameManager.gameTime);
-        text.text = string.Format("{0:00}:{1:00}", ts.TotalMinutes, ts.Seconds);
+        text.text = string.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
     }
 }

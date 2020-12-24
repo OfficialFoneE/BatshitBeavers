@@ -71,6 +71,8 @@ public class BeaverHit : MonoBehaviour
 
         spamKeyMinigame = transform.Find("Canvas").GetChild(0).GetChild(1).GetComponent<SpamKeyMinigame>();
         spamKeyBold = spamKeyMinigame.gameObject;
+
+        NetworkManager.OnGameStart += OnGameStart;
     }
 
     private void Update()
@@ -84,8 +86,6 @@ public class BeaverHit : MonoBehaviour
 
                 if (Input.GetKeyDown(keyCode) && (fishs >= buildCost) && (beavers >= 1))
                 {
-                    Debug.Log("This was called");
-                    spamKeyMinigame.currentValue = 0.0f;
 
                     if (isPlayer1)
                     {
@@ -99,6 +99,7 @@ public class BeaverHit : MonoBehaviour
                         GameCanvas.SetPlayer2Beavers(beavers - 1);
                     }
 
+                    spamKeyMinigame.currentValue = 0.0f;
                     spamKeyBold.SetActive(true);
                     buildCostObject.SetActive(false);
 
@@ -106,29 +107,63 @@ public class BeaverHit : MonoBehaviour
 
                     _isBought = true;
 
+                    if (isPlayer1)
+                    {
+                        LeftSide.AddNewWoodBeaver();
+                    }
+                    else
+                    {
+                        RightSide.AddNewWoodBeaver();
+                    }
+
                 }
             }
         }
     }
 
+    public void Buy()
+    {
+            _isBought = true;
+            spamKeyMinigame.currentValue = 0.0f;
+            spamKeyBold.SetActive(true);
+            buildCostObject.SetActive(false);
+            buttonPressObject.SetActive(true);
+    }
+
     [PunRPC]
     public void OnBought()
     {
+        buttonPressObject.SetActive(false);
         spamKeyBold.SetActive(true);
         buildCostObject.SetActive(false);
+    }
+
+    public void EnableOnNetwork()
+    {
+        buttonPressObject.SetActive(false);
+        spamKeyBold.SetActive(false);
+        buildCostObject.SetActive(true);
     }
 
     private void Start()
     {
         spamKeyMinigame.onClicked += OnClick;
-        spamKeyMinigame.onClicked += OnFinished;
+        spamKeyMinigame.onFinished += OnFinished;
         spamKeyMinigame.isPlayer1 = isPlayer1;
 
         NetworkManager.OnGameStart += OnGameStart;
 
         buttonPress.keyCode = _keyCode;
         spamKeyMinigame.keyCode = _keyCode;
+        spamKeyMinigame.isPlayer1 = isPlayer1;
         buildCostText.text = buildCost.ToString();
+    }
+
+    private void OnEnable()
+    {
+        buttonPress.keyCode = _keyCode;
+        spamKeyMinigame.keyCode = _keyCode;
+        spamKeyMinigame.isPlayer1 = isPlayer1;
     }
 
     private void OnGameStart()
@@ -137,6 +172,9 @@ public class BeaverHit : MonoBehaviour
         {
             photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         }
+
+
+        buttonPressObject.SetActive(((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)));
 
         spamKeyBold.SetActive(false);
         buildCostObject.SetActive(true);
@@ -154,7 +192,15 @@ public class BeaverHit : MonoBehaviour
         if(onCompleted != null)
         {
             onCompleted.Invoke();
+        }
 
+        if(isPlayer1)
+        {
+            GameCanvas.SetPlayer1Logs(GameCanvas.GetPlayer1Logs() + 1);
+        }
+        else
+        {
+            GameCanvas.SetPlayer2Logs(GameCanvas.GetPlayer2Logs() + 1);
         }
 
         spamKeyMinigame.currentValue = 0.0f;

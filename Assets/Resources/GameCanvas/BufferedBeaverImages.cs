@@ -29,6 +29,7 @@ public class BufferedBeaverImages : MonoBehaviour
     private void Start()
     {
         bufferedArray.UpdatePooledObjects(20);
+        bufferedArray.UpdatePooledObjects(1);
         //bufferedArray.UpdatePooledObjects(0);
     }
 

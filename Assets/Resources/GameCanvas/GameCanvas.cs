@@ -39,7 +39,6 @@ public class GameCanvas : MonoBehaviour
 
     public static void SetPlayer1Logs(int count)
     {
-        Debug.Log("This was called");
         photonView.RPC("SetPlayer1LogsNet", RpcTarget.All, count);
     }
     [PunRPC]
@@ -50,31 +49,51 @@ public class GameCanvas : MonoBehaviour
 
     public static void SetPlayer1Fish(int count)
     {
-
+        photonView.RPC("SetPlayer1FishNet", RpcTarget.All, count);
+    }
+    [PunRPC]
+    public void SetPlayer1FishNet(int count)
+    {
+        player1Icons.bufferedFishImages.count = count;
     }
     public static void SetPlayer1Beavers(int count)
     {
-
+        photonView.RPC("SetPlayer1BeaversNet", RpcTarget.All, count);
+    }
+    [PunRPC]
+    public void SetPlayer1BeaversNet(int count)
+    {
+        player1Icons.bufferedBeaverImages.count = count;
     }
 
     public static void SetPlayer2Logs(int count)
     {
-        Debug.Log("This was called");
         photonView.RPC("SetPlayer2LogsNet", RpcTarget.All, count);
     }
     [PunRPC]
     public void SetPlayer2LogsNet(int count)
     {
         player2Icons.bufferedLogImage.count = count;
+        Debug.Log("Logs was called");
     }
 
     public static void SetPlayer2Fish(int count)
     {
-
+        photonView.RPC("SetPlayer2FishNet", RpcTarget.All, count);
+    }
+    [PunRPC]
+    public void SetPlayer2FishNet(int count)
+    {
+        player2Icons.bufferedFishImages.count = count;
     }
     public static void SetPlayer2Beavers(int count)
     {
-
+        photonView.RPC("SetPlayer2BeaversNet", RpcTarget.All, count);
+    }
+    [PunRPC]
+    public void SetPlayer2BeaversNet(int count)
+    {
+        player2Icons.bufferedBeaverImages.count = count;
     }
 
     public static int GetPlayer1Logs()
@@ -104,6 +123,7 @@ public class GameCanvas : MonoBehaviour
     {
         return player2Icons.bufferedBeaverImages.count;
     }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
     private static void OnResourcesLoad()
     {

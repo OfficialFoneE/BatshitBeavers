@@ -8,7 +8,7 @@ public class Dam : MonoBehaviour
 
     private Animator animator;
 
-    [SerializeField] private int[] buildCosts = { 1, 3, 6, 10 };
+    [SerializeField] private int[] buildCosts = { 3, 5, 7, 9 };
 
     public int state
     {
@@ -36,6 +36,9 @@ public class Dam : MonoBehaviour
     private PhotonView photonView;
 
     public bool isPlayer1;
+
+    public delegate void GeneralEventHandler();
+    public GeneralEventHandler OnMaximum;
 
     private void Awake()
     {
@@ -115,6 +118,11 @@ public class Dam : MonoBehaviour
         }
     }
 
+    public void OnNetworkEnable()
+    {
+        buttonPressObject.SetActive(false);
+    }
+
     [PunRPC]
     private void EnableSpamKey(bool value, int costCount, bool enableBuildCost)
     {
@@ -152,6 +160,19 @@ public class Dam : MonoBehaviour
                 {
                     buildCostObject.SetActive(false);
                     photonView.RPC("EnableSpamKey", RpcTarget.Others, true, 0, false);
+
+                    if (OnMaximum != null)
+                    {
+                        OnMaximum.Invoke();
+                    }
+
+                    if(isPlayer1)
+                    {
+                        LeftSide.AddNewDamBeaver();
+                    } else
+                    {
+                        RightSide.AddNewDamBeaver();
+                    }
                 }
                 else
                 {
