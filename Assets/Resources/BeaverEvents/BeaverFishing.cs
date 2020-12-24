@@ -149,8 +149,9 @@ public class BeaverFishing : MonoBehaviour
 
     public void Buy()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine || (!isPlayer1 && (GetComponentInParent<RightSide>() != null)))
         {
+            Debug.Log("I have been called");
             holdKeyMinigame.currentHoldTime = 0.0f;
             holdKeyBold.SetActive(true);
             buildCostObject.SetActive(false);
@@ -164,6 +165,7 @@ public class BeaverFishing : MonoBehaviour
         if (((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)) && !photonView.IsMine)
         {
             photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+
         }
 
         buttonPressObject.SetActive(((isPlayer1 && PhotonNetwork.IsMasterClient) || (!isPlayer1 && !PhotonNetwork.IsMasterClient)));

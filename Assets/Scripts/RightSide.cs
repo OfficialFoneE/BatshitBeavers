@@ -191,7 +191,7 @@ public class RightSide : MonoBehaviour
             var beaverFish = freeBeaverFishing[0];
 
             beaverFish.OnBought();
-            beaverFish.buildCost = hitCosts[usedBeaverHits.Count - 1];
+            //beaverFish.buildCost = hitCosts[usedBeaverHits.Count - 1];
             beaverFish.gameObject.SetActive(true);
 
             usedBeaverFishing.Add(beaverFish);
