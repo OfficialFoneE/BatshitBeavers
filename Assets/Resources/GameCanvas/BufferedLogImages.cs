@@ -29,8 +29,8 @@ public class BufferedLogImages : MonoBehaviour
 
     private void Start()
     {
-        bufferedArray.UpdatePooledObjects(50);
-        //bufferedArray.UpdatePooledObjects(2);
+        bufferedArray.UpdatePooledObjects(20);
+        bufferedArray.UpdatePooledObjects(2);
         //bufferedArray.UpdatePooledObjects(0);
     }
 

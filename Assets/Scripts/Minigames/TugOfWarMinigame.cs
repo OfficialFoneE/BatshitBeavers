@@ -57,14 +57,16 @@ public class TugOfWarMinigame : MonoBehaviour
 
     private void Start()
     {
-        player1ProgressBar.currentPercent = 0.5f;
-        player2ProgressBar.currentPercent = 0.5f;
+        player1ProgressBar.currentPercent = 50;
+        player2ProgressBar.currentPercent = 50;
     }
 
     public void OnEnable()
     {
         currentWinStatus = WinStatus.None;
         cantCallAnymore = false;
+        player1ProgressBar.currentPercent = 50;
+        player2ProgressBar.currentPercent = 50;
     }
 
     public void UpdateTugOfWar()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BeaverDen : MonoBehaviour
 {
-    [SerializeField] private int[] buildCosts = { 1, 3, 6, 10 };
+    [SerializeField] private int[] buildCosts = { 1, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
 
     public KeyCode keyCode;
 
