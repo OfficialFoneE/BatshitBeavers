@@ -80,7 +80,10 @@ public class BeaverTugOfWar : MonoBehaviour
         }
 
         DisableBeaversFighting();
+        PlaySound((int)winStatus);
+
         photonView.RPC("DisableBeaversFighting", RpcTarget.Others);
+        photonView.RPC("PlaySound", RpcTarget.Others, (int)winStatus);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -94,6 +97,41 @@ public class BeaverTugOfWar : MonoBehaviour
         warningButton.SetActive(false);
         beaversFighting.SetActive(false);
         canvas.SetActive(false);
+    }
+
+    [PunRPC]
+    private void PlaySound(int winStatus)
+    {
+        switch ((TugOfWarMinigame.WinStatus)winStatus)
+        {
+            case TugOfWarMinigame.WinStatus.Player1:
+                if(PhotonNetwork.IsMasterClient)
+                {
+                    AudioSFXReferences.PlayWin();
+                }
+                else
+                {
+                    AudioSFXReferences.PlayLose();
+                }
+            break;
+
+            case TugOfWarMinigame.WinStatus.Player2:
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    AudioSFXReferences.PlayLose();
+                }
+                else
+                {
+                    AudioSFXReferences.PlayWin();
+                }
+                break;
+            case TugOfWarMinigame.WinStatus.Tie:
+                break;
+            case TugOfWarMinigame.WinStatus.None:
+                break;
+            default:
+                break;
+        }
     }
 
     private void RandomWaitTime()

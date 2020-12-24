@@ -47,6 +47,7 @@ public class TugOfWar_Player1 : MonoBehaviour, IPunObservable
         if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(buttonToPress))
         {
             _pressCount++;
+            AudioSFXReferences.PlayButtonClick();
         }
     }
 

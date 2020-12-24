@@ -107,6 +107,8 @@ public class BeaverHit : MonoBehaviour
 
                     _isBought = true;
 
+                    AudioSFXReferences.PlayPurchase();
+
                     if (isPlayer1)
                     {
                         LeftSide.AddNewWoodBeaver();
@@ -136,6 +138,8 @@ public class BeaverHit : MonoBehaviour
         buttonPressObject.SetActive(false);
         spamKeyBold.SetActive(true);
         buildCostObject.SetActive(false);
+
+        AudioSFXReferences.PlayBadPurchase();
     }
 
     public void EnableOnNetwork()
@@ -185,6 +189,7 @@ public class BeaverHit : MonoBehaviour
     private void OnClick()
     {
         animator.SetTrigger("Hit");
+        AudioSFXReferences.PlayButtonClick();
     }
 
     private void OnFinished()

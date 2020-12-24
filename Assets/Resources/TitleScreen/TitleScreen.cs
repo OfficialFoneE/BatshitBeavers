@@ -18,7 +18,7 @@ public class TitleScreen : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        var buttons = GetComponentsInChildren<Button>();
+        var buttons = GetComponentsInChildren<Button>(true);
 
         findGameButton = buttons[0];
         localGameButton = buttons[1];

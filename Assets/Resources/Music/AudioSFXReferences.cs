@@ -26,6 +26,13 @@ public class AudioSFXReferences : MonoBehaviour
     private static AudioClip buttonHighlightClip;
     private static AudioClip buttonClickClip;
 
+    [SerializeField] private AudioClip _purchaseClip;
+    private static AudioClip purchaseClip;
+
+    [SerializeField] private AudioClip _winClip;
+    private static AudioClip winClip;
+    [SerializeField] private AudioClip _loseClip;
+    private static AudioClip loseClip;
 
     [SerializeField] private AudioClip _mainMenuMusic;
     [SerializeField] private AudioClip _queueingMusic;
@@ -47,11 +54,15 @@ public class AudioSFXReferences : MonoBehaviour
         buttonHighlightClip = _buttonHighlightClip;
         buttonClickClip = _buttonClickClip;
 
+        purchaseClip = _purchaseClip;
+        winClip = _winClip;
+        loseClip = _loseClip;
+
         mainMenuMusic = _mainMenuMusic;
         queueingMusic = _queueingMusic;
         gameMusic = _gameMusic;
 
-        bufferedAudioSources.UpdatePooledObjects(20);
+        bufferedAudioSources.UpdatePooledObjects(50);
         bufferedAudioSources.UpdatePooledObjects(0);
     }
 
@@ -141,9 +152,26 @@ public class AudioSFXReferences : MonoBehaviour
 
     public static void PlayButtonClick()
     {
-        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(buttonClickClip, 1f, 2);
+        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(buttonClickClip, Random.Range(0.9f, 1.1f), 1);
     }
 
+    public static void PlayPurchase()
+    {
+        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(purchaseClip, Random.Range(0.9f, 1.1f), 1);
+    }
+    public static void PlayBadPurchase()
+    {
+        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(purchaseClip, Random.Range(0.6f, .8f), 1);
+    }
+
+    public static void PlayWin()
+    {
+        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(winClip, 1f, 1);
+    }
+    public static void PlayLose()
+    {
+        bufferedAudioSources.GetUnusedPooledObjects(1)[0].PlayOneShot(loseClip, 1f, 1);
+    }
     private BufferedAudioSource InstantiateBufferedAudioSource()
     {
         return new BufferedAudioSource(Instantiate(audioSourcePrefab, mainCameraTransform));

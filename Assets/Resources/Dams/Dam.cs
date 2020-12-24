@@ -60,6 +60,7 @@ public class Dam : MonoBehaviour
     {
         NetworkManager.OnGameStart += ResetDam;
 
+        spamKeyMinigame.onClicked += OnClick;
         spamKeyMinigame.onZero += OnZero;
         spamKeyMinigame.onFinished += OnFinish;
 
@@ -109,6 +110,9 @@ public class Dam : MonoBehaviour
                     {
                         GameCanvas.SetPlayer2Logs(logs - buildCosts[state]);
                     }
+
+                    AudioSFXReferences.PlayPurchase();
+
                     state++;
                     buildCostText.text = buildCosts[state].ToString();
                     photonView.RPC("EnableSpamKey", RpcTarget.Others, true, buildCosts[state], true);
@@ -118,9 +122,16 @@ public class Dam : MonoBehaviour
         }
     }
 
+    public void OnClick()
+    {
+        AudioSFXReferences.PlayButtonClick();
+    }
+
     public void OnNetworkEnable()
     {
         buttonPressObject.SetActive(false);
+
+        AudioSFXReferences.PlayBadPurchase();
     }
 
     [PunRPC]
@@ -180,6 +191,9 @@ public class Dam : MonoBehaviour
                 }
 
                 buildCostText.text = buildCosts[state].ToString();
+
+
+                AudioSFXReferences.PlayPurchase();
             }
         }
     }

@@ -42,12 +42,17 @@ public class BeaverDen : MonoBehaviour
     private void Start()
     {
         NetworkManager.OnGameStart += ResetDam;
-
+        spamKeyMinigame.onClicked += OnClick;
         spamKeyMinigame.onFinished += OnFinish;
 
         buttonPress.keyCode = keyCode;
         spamKeyMinigame.keyCode = keyCode;
         spamKeyMinigame.isPlayer1 = isPlayer1;
+    }
+
+    private void OnClick()
+    {
+        AudioSFXReferences.PlayButtonClick();
     }
 
     private void ResetDam()
@@ -94,6 +99,8 @@ public class BeaverDen : MonoBehaviour
 
                 beaverCount++;
 
+                AudioSFXReferences.PlayPurchase();
+
                 if (beaverCount == maxBeaverCount)
                 {
                     buildCostObject.SetActive(false);
@@ -114,5 +121,7 @@ public class BeaverDen : MonoBehaviour
     {
         buildCostObject.SetActive(value);
         buildCostText.text = costCount.ToString();
+
+        AudioSFXReferences.PlayBadPurchase();
     }
 }

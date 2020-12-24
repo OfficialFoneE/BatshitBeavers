@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -131,20 +132,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if(isPlayingGame)
-        {
-            //TODO: message player has left the game
+        //if(isPlayingGame)
+        //{
+        //    //TODO: message player has left the game
 
-            isPlayingGame = false;
-        }
-        else
-        {
-            NetworkDebugCanvas.SetConnectionStatus("Created Room");
+        //    //SceneManager.LoadScene(0);
+        //    //Application.Quit();
 
-            NetworkDebugCanvas.SetConnectingStatus("Waiting for Opponent");
+        //    EndingScreen.Win();
 
-            isPlayingGame = false;
-        }
+        //    isPlayingGame = false;
+        //}
+        //else
+        //{
+        //    NetworkDebugCanvas.SetConnectionStatus("Created Room");
+
+        //    NetworkDebugCanvas.SetConnectingStatus("Waiting for Opponent");
+
+        //    isPlayingGame = false;
+        //}
+        EndingScreen.Win();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -191,7 +198,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
         }
 
-        Start();
+        if(!EndingScreen.finished)
+        {
+            EndingScreen.Win();
+        }
+
+        //SceneManager.LoadScene(0);
+        //OnEnable();
         //TODO: message disconnetion error and maybe reconnect based on error
     }
 

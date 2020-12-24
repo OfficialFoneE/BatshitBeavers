@@ -132,6 +132,8 @@ public class BeaverFishing : MonoBehaviour
 
                     _isBought = true;
 
+                    AudioSFXReferences.PlayPurchase();
+
                     if (isPlayer1)
                     {
                         LeftSide.AddNewFishBeaver();
@@ -178,6 +180,8 @@ public class BeaverFishing : MonoBehaviour
         buttonPressObject.SetActive(false);
         holdKeyBold.SetActive(true);
         buildCostObject.SetActive(false);
+
+        AudioSFXReferences.PlayBadPurchase();
     }
 
     private void OnClick()

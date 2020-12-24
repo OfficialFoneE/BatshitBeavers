@@ -18,10 +18,10 @@ public class NetworkDebugCanvas : MonoBehaviour
 
     public static void SetConnectionStatus(string status)
     {
-        connectionStatusText.text = "Connection Status : <color=green>" + status;
+        //connectionStatusText.text = "Connection Status : <color=green>" + status;
     }
     public static void SetConnectingStatus(string status)
     {
-        connectingStatusText.text = "Connecting Status : <color=green>" + status;
+        //connectingStatusText.text = "Connecting Status : <color=green>" + status;
     }
 }
