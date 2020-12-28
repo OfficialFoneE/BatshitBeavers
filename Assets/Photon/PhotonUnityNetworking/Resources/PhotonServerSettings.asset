@@ -16,9 +16,9 @@ MonoBehaviour:
     AppIdRealtime: 77690164-e5aa-4798-9c20-4fa121cdf978
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 
+    AppVersion: V1
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: us
     Server: 
     Port: 0
     ProxyServer: 
@@ -32,7 +32,38 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList: []
+  RpcList:
+  - CallTugOfWarWinner
+  - ClickRpc
+  - DestroyRpc
+  - DestroySpaceship
+  - DisableBeaversFighting
+  - DsiableCostObject
+  - EnableBeaverTugOfWar
+  - EnableSpamKey
+  - Fire
+  - NetworkInstantiateDam
+  - NetworkInstantiateDam1
+  - NetworkInstantiateFirstFishBeaver
+  - NetworkInstantiateFirstFishBeaver1
+  - NetworkInstantiateFirstWoodBeaver
+  - NetworkInstantiateFirstWoodBeaver1
+  - NetworkInstantiateFishBeaver
+  - NetworkInstantiateFishBeaver1
+  - NetworkInstantiateWoodBeaver
+  - NetworkInstantiateWoodBeaver1
+  - OnBought
+  - Player1WinsNet
+  - Player2WinsNet
+  - PlaySound
+  - RespawnSpaceship
+  - SetPlayer1BeaversNet
+  - SetPlayer1FishNet
+  - SetPlayer1LogsNet
+  - SetPlayer2BeaversNet
+  - SetPlayer2FishNet
+  - SetPlayer2LogsNet
+  - StartGame
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 0

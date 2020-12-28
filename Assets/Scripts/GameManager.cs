@@ -12,16 +12,30 @@ public class GameManager : MonoBehaviour
 
     private static RepeatingTileEnviroment repeatingTileEnviroment;
 
+    private static InstructionCanvas instructionCanvas;
+
     private void Awake()
     {
         titleScreen = FindObjectOfType<TitleScreen>(true);
         introductionCanvas = FindObjectOfType<IntroductionCanvas>(true);
         repeatingTileEnviroment = FindObjectOfType<RepeatingTileEnviroment>(true);
+        instructionCanvas = FindObjectOfType<InstructionCanvas>(true);
     }
 
     private void Start()
     {
         NetworkManager.OnGameStart += FoundQueue;
+    }
+
+    public static void EnableInstructionsCanvas()
+    {
+        titleScreen.gameObject.SetActive(false);
+        instructionCanvas.gameObject.SetActive(true);
+    }
+    public static void EnableMainCanvas()
+    {
+        instructionCanvas.gameObject.SetActive(false);
+        titleScreen.gameObject.SetActive(true);
     }
 
     public static void EnterQueue()
